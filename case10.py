@@ -73,45 +73,58 @@ def car_def(cars):
     return order_list
 
 
-def queue(dict2, oil_type, dict1, m, dict3, j):
-    if type(dict2[oil_type]) == int:
-        if dict1[dict2[oil_type]] >= 1:
-            dict1[dict2[oil_type]] -= 1
-            p = dict2[oil_type]
-            print(dict1)
-        else:
-            print('зашквар')
-            p = 0
-    else:
-        srt1 = ''
-        for i in dict2[oil_type]:
-            srt1 += str(i)
-        s = len(srt1) - 1
-        l = 0
-        d = dict1[(int(srt1[0]))]
-        while l < s:
-            if dict1[(int(srt1[l]))] <= 0:
+def queue(dict2, oil_type, dict1, m, dict3, j, g, p):
+    if g > j:
+        if type(dict2[oil_type]) == int:
+            if dict1[dict2[oil_type]] >= 1:
+                dict1[dict2[oil_type]] -= 1
+                p = dict2[oil_type]
+                print(dict1)
+            else:
+                print('зашквар')
                 p = 0
-                print('пeс')
-            elif d > dict1[(int(srt1[l]))] and dict1[(int(srt1[l]))] > 0:
-                dict1[(int(srt1[l]))] -= 1
-                d = dict1[(int(srt1[l]))]
-                p = int(srt1[l])
-                print(dict1)
-            elif d < dict1[(int(srt1[l]))] and dict1[(int(srt1[l]))] > 0:
-                dict1[(int(srt1[l]))] -= 1
-                d = dict1[(int(srt1[l]))]
-                p = int(srt1[l])
-                print(dict1)
-            elif d == dict1[(int(srt1[l]))] and dict1[(int(srt1[l]))] > 0:
-                dict1[(int(srt1[l]))] -= 1
-                d = dict1[(int(srt1[l]))]
-                p = int(srt1[l])
-                print(dict1)
-            l += 1
+        else:
+            srt1 = ''
+            for i in dict2[oil_type]:
+                srt1 += str(i)
+            s = len(srt1) - 1
+            l = 0
+            d = dict1[(int(srt1[0]))]
+            while l < s:
+                if dict1[(int(srt1[l]))] <= 0:
+                    p = 0
+                    print('пeс')
+                elif d > dict1[(int(srt1[l]))] and dict1[(int(srt1[l]))] > 0:
+                    dict1[(int(srt1[l]))] -= 1
+                    d = dict1[(int(srt1[l]))]
+                    p = int(srt1[l])
+                    print(dict1)
+                elif d < dict1[(int(srt1[l]))] and dict1[(int(srt1[l]))] > 0:
+                    dict1[(int(srt1[l]))] -= 1
+                    d = dict1[(int(srt1[l]))]
+                    p = int(srt1[l])
+                    print(dict1)
+                elif d == dict1[(int(srt1[l]))] and dict1[(int(srt1[l]))] > 0:
+                    dict1[(int(srt1[l]))] -= 1
+                    d = dict1[(int(srt1[l]))]
+                    p = int(srt1[l])
+                    print(dict1)
+                l += 1
     if p != 0:
         dict3.update({p: m})
-        print('jgbhjn', dict3)
+    g = min(dict3.values())
+    if g < j:
+        k = dict3.keys()
+        for i in k:
+            if dict3.get(i) == g:
+                b = i
+        if dict1[b] < 5:
+            dict1[b] += 1
+        print('')
+        print(dict1)
+        print('')
+
+
 
 
 
@@ -178,6 +191,8 @@ def main():
     time_counter = 0
     oil_litres = {'АИ-80': 0, 'АИ-92': 0, 'АИ-95': 0, 'АИ-98': 0}
     dict3 = {}
+    g = 1000
+    p = 0
 
     with open("azs.txt", "r") as azs:
         s = azs_def1(azs)
@@ -195,10 +210,10 @@ def main():
                 i += " "
                 oil_type = i[-6:-1]
                 t = litres_time(litres)
-                h = hours(time, t)
-                m = minutes(time, t)
-                j = gigi(time, t)
-                queue(dict2, oil_type, dict1, m, dict3, j)
+                h = hours(time, t)      #правильный уезд
+                m = minutes(time, t)    #уехал в минутах
+                j = gigi(time, t)       # приехал в минутах
+                queue(dict2, oil_type, dict1, m, dict3, j, g, p)
                 oil_litres[oil_type] += litres
 
 
