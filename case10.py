@@ -1,6 +1,53 @@
 from random import randint
 
 
+def azs_def1(azs):
+    azs = azs.readlines()
+    counter = 0
+    oil_type1 = ""
+    dict1 = {}
+    dict2 = {}
+    for n in azs:
+        for i in n:
+            if i.isdigit() and counter == 0:
+                kolonka = int(i)
+                counter += 1
+            elif i.isdigit() and counter == 1:
+                que = int(i)
+                counter += 1
+            elif i == " " or i == "\n":
+                pass
+        counter = 0
+
+        dict1.update({kolonka: que})  # словарь {номер колонки : длина очереди}
+
+        if n.count("А") == 1:
+            oil_type1 = n[n.find("А"):n.find("А") + 5]
+            if oil_type1 in dict2:
+                list_ = list()
+                list_.append(dict2.get(oil_type1))
+                list_.append(kolonka)
+                dict2.update({oil_type1: list_})
+            else:
+                dict2.update({oil_type1: kolonka})
+            oil_type1 = ""
+        else:
+            s = n.count("А")
+            for d in range(s):
+                oil_type1 = n[n.find("А"):n.find("А") + 5]
+                if oil_type1 in dict2:
+                    list_ = list()
+                    list_.append(dict2.get(oil_type1))
+                    list_.append(kolonka)
+                    dict2.update({oil_type1: list_})
+                else:
+                    dict2.update({oil_type1: kolonka})
+                oil_type1 = ""
+                n = n[n.find("А") + 5:]
+    return dict1, dict2
+
+
+
 def litres_time(litres):
     rand = randint(-1, 1)
     time = litres / 10
@@ -11,6 +58,19 @@ def litres_time(litres):
     return time
 
 
+def car_def(cars):
+    cars = cars.read()
+    order_list = []
+    order = ""
+    for i in cars:
+        if i != "\n":
+            order += i
+        else:
+            order_list.append(order)  # составили список заказов (автомобилей)
+            order = ""
+    return order_list
+
+
 def main():
     order = ""
     order_list = []
@@ -19,81 +79,21 @@ def main():
     queue = {}
 
     with open("azs.txt", "r") as azs:
-        azs = azs.readlines()
-        counter = 0
-        oil_type1 = ""
-        dict1 = {}
-        dict2 = {}
-        for n in azs:
-            for i in n:
-                if i.isdigit() and counter == 0:
-                    kolonka = int(i)
-                    counter += 1
-                elif i.isdigit() and counter == 1:
-                    que = int(i)
-                    counter += 1
-                elif i == " " or i == "\n":
-                    pass
-            counter = 0
-
-            dict1.update({kolonka:que})  # словарь {номер колонки : длина очереди}
-
-            if n.count("А") == 1:
-                oil_type1 = n[n.find("А"):n.find("А")+5]
-                if oil_type1 in dict2:
-                    list_ = list()
-                    list_.append(dict2.get(oil_type1))
-                    list_.append(kolonka)
-                    dict2.update({oil_type1: list_})
-                else:
-                    dict2.update({oil_type1: kolonka})
-                oil_type1 = ""
-            else:
-                s = n.count("А")
-                for d in range(s):
-                    oil_type1 = n[n.find("А"):n.find("А") + 5]
-                    if oil_type1 in dict2:
-                        list_ = list()
-                        list_.append(dict2.get(oil_type1))
-                        list_.append(kolonka)
-                        dict2.update({oil_type1: list_})
-                    else:
-                        dict2.update({oil_type1: kolonka})
-                    oil_type1 = ""
-                    n = n[n.find("А") + 5:]
+        s = azs_def1(azs)
+        dict1 = s[0]
+        dict2 = s[1]
         print("{бензин : номер колонки} -  ", dict2)
         print("{номер колонки: длина очереди} -  ", dict1)
 
-
         with open("input.txt", "r") as cars:
-            cars = cars.read()
-            for i in cars:
-                if i != "\n":
-                    order += i
-                else:
-                    order_list.append(order)  # составили список заказов (автомобилей)
-                    order = ""
+            order_list = car_def(cars)
             print("Список машин: ", order_list)
-
             for i in order_list:
                 time = i[0:5]
                 litres = int(i[6:8].strip())
                 i += " "
                 oil_type = i[-6:-1]
                 litres_time(litres)
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
