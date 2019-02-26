@@ -71,12 +71,48 @@ def car_def(cars):
     return order_list
 
 
+def queue(dict2, oil_type, dict1):
+    if type(dict2[oil_type]) == int:
+        if dict1[dict2[oil_type]] >= 1:
+            dict1[dict2[oil_type]] -= 1
+            print(dict1)
+        else:
+            print('зашквар')
+    else:
+        srt1 = ''
+        for i in dict2[oil_type]:
+            srt1 += str(i)
+        s = len(srt1) - 1
+        l = 0
+        d = dict1[(int(srt1[0]))]
+        while l < s:
+            if dict1[(int(srt1[l]))] <= 0 or dict1[(int(srt1[l]))] <= 0:
+                print('пeс')
+            elif d > dict1[(int(srt1[l]))] and dict1[(int(srt1[l]))] > 0:
+                dict1[(int(srt1[l]))] -= 1
+                d = dict1[(int(srt1[l]))]
+                print(dict1)
+            elif d < dict1[(int(srt1[l]))] and dict1[(int(srt1[l]))] > 0:
+                dict1[(int(srt1[l]))] -= 1
+                d = dict1[(int(srt1[l]))]
+                print(dict1)
+            elif d == dict1[(int(srt1[l]))] and dict1[(int(srt1[l]))] > 0:
+                dict1[(int(srt1[l]))] -= 1
+                d = dict1[(int(srt1[l]))]
+                print(dict1)
+            elif dict1[(int(srt1[l]))] <= 0 or dict1[(int(srt1[l]))] <= 0:
+                print(dict1)
+            l += 1
+
+
+def bistro(time, t):
+
+
 def main():
     order = ""
     order_list = []
     time_counter = 0
     oil_litres = {'АИ-80': 0, 'АИ-92': 0, 'АИ-95': 0, 'АИ-98': 0}
-    queue = {}
 
     with open("azs.txt", "r") as azs:
         s = azs_def1(azs)
@@ -93,7 +129,10 @@ def main():
                 litres = int(i[6:8].strip())
                 i += " "
                 oil_type = i[-6:-1]
-                litres_time(litres)
+                t = litres_time(litres)
+                queue(dict2, oil_type, dict1)
+                bistro(time, t)
+
 
 
 
